@@ -11,9 +11,9 @@ def c_array(ctype, values):
     return arr
 
 class IMAGE(Structure):
-    _fields_ = [("w", c_int),
+    _fields_ = [("c", c_int),
                 ("h", c_int),
-                ("c", c_int),
+                ("w", c_int),
                 ("data", POINTER(c_float))]
     def __add__(self, other):
         return add_image(self, other)

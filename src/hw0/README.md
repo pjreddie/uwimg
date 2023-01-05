@@ -9,7 +9,7 @@ For the first assignment we'll just get to know the codebase a little bit and pr
 We have a pretty basic datastructure to store images in our library. The `image` struct stores the image metadata like width, height, and number of channels. It also contains the image data stored as a floating point array. You can check it out in `src/image.h`, it looks like this:
 
     typedef struct{
-        int h,w,c;
+        int c,h,w;
         float *data;
     } image;
 
@@ -21,9 +21,9 @@ to load a new image. To save an image use:
 
     save_image(im, "output");
 
-which will save the image as `output.jpg`. If you want to make a new image with dimensions Width x Height x Channels you can call:
+which will save the image as `output.jpg`. If you want to make a new image with dimensions Channels x Height x Width you can call:
 
-    image im = make_image(w,h,c);
+    image im = make_image(c, h, w);
 
 You should also use: 
 
@@ -57,10 +57,10 @@ In our `data` array we store the image in `CHW` format. The first pixel in data 
 
 Your first task is to fill out these two functions in `src/hw0/process_image.c`:
 
-    float get_pixel(image im, int x, int y, int c);
-    void set_pixel(image im, int x, int y, int c, float v);
+    float get_pixel(image im, int c, int h, int w);
+    void set_pixel(image im, int c, int h, int w, float v);
 
-`get_pixel` should return the pixel value at column `x`, row `y`, and channel `c`. `set_pixel` should set the pixel to the value `v`. You will need to do bounds checking to make sure the coordinates are valid for the image. `set_pixel` should simply return without doing anything if you pass in invalid coordinates. For `get_pixel` we will perform padding to the image. There are a number of possible padding strategies:
+`get_pixel` should return the pixel value at channel `c`, row `h`, and column `w`. `set_pixel` should set the pixel to the value `v`. You will need to do bounds checking to make sure the coordinates are valid for the image. `set_pixel` should simply return without doing anything if you pass in invalid coordinates. For `get_pixel` we will perform padding to the image. There are a number of possible padding strategies:
 
 ![Image padding strategies](../../figs/pad.png)
 
@@ -72,7 +72,7 @@ We can test out our pixel-setting code on the dog image by removing all of the r
     im = load_image("data/dog.jpg")
     for row in range(im.h):
         for col in range(im.w):
-            set_pixel(im, row, col, 0, 0)
+            set_pixel(im, 0, row, col, 0)
     save_image(im, "figs/dog_no_red")
 
 Then try running it. Check out our very not red dog:
@@ -82,7 +82,7 @@ Then try running it. Check out our very not red dog:
 
 ## 0.1 Copying images ##
 
-Sometimes you have an image and you want to copy it! To do this we should make a new image of the same size and then fill in the data array in the new image. You could do this by getting and setting pixels, by looping over the whole array and just copying the floats (pop quiz: if the image is 256x256x3, how many total pixels are there?), or by using the built-in memory copying function `memcpy`.
+Sometimes you have an image and you want to copy it! To do this we should make a new image of the same size and then fill in the data array in the new image. You could do this by getting and setting pixels, by looping over the whole array and just copying the floats (pop quiz: if the image is 3x256x256, how many total pixels are there?), or by using the built-in memory copying function `memcpy`.
 
 Fill in the function `image copy_image(image im)` in `src/hw0/process_image.c` with your code.
 
