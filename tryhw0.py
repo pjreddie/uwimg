@@ -29,9 +29,8 @@ save_image(im, "doglight_fixed")
 # Saturates the swatches image
 im = load_image("data/swatch.jpg")
 rgb_to_hsv(im)
-
-#change the third parameter to increase/decrease saturation below
-#decimals r ok
+# can change the third parameter to increase/decrease saturation below
+# decimals r ok
 shift_image(im, 1, 1)
 clamp_image(im)
 hsv_to_rgb(im)
