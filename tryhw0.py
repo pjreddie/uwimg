@@ -1,5 +1,6 @@
 from uwimg import *
 
+'''
 # 1. Getting and setting pixels
 im = load_image("data/dog.jpg")
 for row in range(im.h):
@@ -22,18 +23,23 @@ save_image(im, "overflow")
 # 5. Clamp Image
 clamp_image(im)
 save_image(im, "doglight_fixed")
+'''
 
-# 6-7. Colorspace and saturation
-im = load_image("data/dog.jpg")
+# Colorspace and saturation
+# Saturates the swatches image
+im = load_image("data/swatch.jpg")
 rgb_to_hsv(im)
-shift_image(im, 1, .2)
+
+#change the third parameter to increase/decrease saturation below
+#decimals r ok
+shift_image(im, 1, 1)
 clamp_image(im)
 hsv_to_rgb(im)
-save_image(im, "dog_saturated")
+save_image(im, "swatch_saturated")
 
-# NEW Black and White Dog
-im = load_image("data/dog.jpg")
+# Black and White filter on skin swatch
+im = load_image("data/swatch.jpg")
 im = rgb_to_grayscale(im)
-save_image(im, "1dogbw")
+save_image(im, "1swatch")
 
 
