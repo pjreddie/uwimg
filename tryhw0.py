@@ -31,4 +31,9 @@ clamp_image(im)
 hsv_to_rgb(im)
 save_image(im, "dog_saturated")
 
+# NEW Black and White Dog
+im = load_image("data/dog.jpg")
+im = rgb_to_grayscale(im)
+save_image(im, "1dogbw")
+
 
