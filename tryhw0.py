@@ -1,44 +1,42 @@
 from uwimg import *
+from flask import Flask, send_file, request
+from werkzeug.utils import secure_filename
+import tempfile 
+from flask_cors import CORS
 
-'''
-# 1. Getting and setting pixels
-im = load_image("data/dog.jpg")
-for row in range(im.h):
-    for col in range(im.w):
-        set_pixel(im, 0, row, col, 0)
-save_image(im, "dog_no_red")
+app = Flask(__name__)
+CORS(app)
+@app.route('/process_image1', methods=['POST'])
+def process_images_saturation():
+    print('TESTING')
+    uploaded_file = request.files['file']
 
-# 3. Grayscale image
-im = load_image("data/colorbar.png")
-graybar = rgb_to_grayscale(im)
-save_image(graybar, "graybar")
+    uploaded_file.save("testing.jpeg")
 
-# 4. Shift Image
-im = load_image("data/dog.jpg")
-shift_image(im, 0, .4)
-shift_image(im, 1, .4)
-shift_image(im, 2, .4)
-save_image(im, "overflow")
+    # Saturating the swatches image
+    im = load_image("testing.jpeg")
+    rgb_to_hsv(im)
+    shift_image(im, 1, 1)  # Adjust saturation here
+    clamp_image(im)
+    hsv_to_rgb(im)
+    save_image(im, "swatch_saturated")
 
-# 5. Clamp Image
-clamp_image(im)
-save_image(im, "doglight_fixed")
-'''
+    return send_file('swatch_saturated.jpg')
 
-# Colorspace and saturation
-# Saturates the swatches image
-im = load_image("data/swatch.jpg")
-rgb_to_hsv(im)
-# can change the third parameter to increase/decrease saturation below
-# decimals r ok
-shift_image(im, 1, 1)
-clamp_image(im)
-hsv_to_rgb(im)
-save_image(im, "swatch_saturated")
+@app.route('/process_image2', methods=['POST'])
+def process_images_bw():
+    print('TESTING')
+    uploaded_file = request.files['file']
 
-# Black and White filter on skin swatch
-im = load_image("data/swatch.jpg")
-im = rgb_to_grayscale(im)
-save_image(im, "1swatch")
+    uploaded_file.save("testing.jpeg")
+
+    # Black and White filter on skin swatch
+    im = load_image("testing.jpeg")
+    im = rgb_to_grayscale(im)
+    save_image(im, "swatch_bw")
+
+    return send_file('swatch_bw.jpg')
 
 
+if __name__ == '__main__':
+    app.run()
